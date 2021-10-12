@@ -433,6 +433,7 @@ void menu_actualizar(apu_nodo modificado)
 
   char *nom = (char*) malloc(100*sizeof(char));
 
+  size_t arroba, punto;
   switch (opcion)
   {
     case 1:
@@ -442,10 +443,22 @@ void menu_actualizar(apu_nodo modificado)
       modificado->nombre = cadena(nom,strlen(nom));
       break;
     case 2:
-      cout << "Telefono: ";
-      cin >> modificado->telefono;
+      do {
+        cout << "Telefono: ";
+        cin >> modificado->telefono;
+      } while(modificado->telefono.length()!=10);
       break;
     case 3:
+      do {
+        cout << "Correo: ";
+        cin >> modificado->correo;
+        arroba = modificado->correo.find('@');
+        punto = modificado->correo.find('.');
+        if (arroba == string::npos || punto == string::npos)
+        {
+          arroba = 0;
+        }
+      } while(arroba == 0 || punto <= (arroba+1) || (modificado->correo.length()-1) == punto);
       cout << "Correo: ";
       cin >> modificado->correo;
       break;
@@ -454,10 +467,20 @@ void menu_actualizar(apu_nodo modificado)
       cout << "Nombre: ";
       cin.getline(nom,100);
       modificado->nombre = cadena(nom,strlen(nom));
-      cout << "Telefono: ";
-      cin >> modificado->telefono;
-      cout << "Correo: ";
-      cin >> modificado->correo;
+      do {
+        cout << "Telefono: ";
+        cin >> modificado->telefono;
+      } while(modificado->telefono.length()!=10);
+      do {
+        cout << "Correo: ";
+        cin >> modificado->correo;
+        arroba = modificado->correo.find('@');
+        punto = modificado->correo.find('.');
+        if (arroba == string::npos || punto == string::npos)
+        {
+          arroba = 0;
+        }
+      } while(arroba == 0 || punto <= (arroba+1) || (modificado->correo.length()-1) == punto);
       break;
     case 5:
       main();
