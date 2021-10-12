@@ -55,35 +55,68 @@ int main(void)
 void menuInicial(void)
 {
   // MENU INICIAL
+
   cout << "MENU:" << '\n';
   cout << "1. Agregar amigos." << '\n';
-  cout << "2. Recuperar de unidad fisica." << '\n';
-  cout << "3. Salir." << '\n';
-  cout << '\n' << "Elija una opcion: ";
-  cin >> opcion;
-
-  switch (opcion)
+  FILE *fp = fopen("./datos.csv", "r");
+  if (fp != NULL)
   {
-    case 1:
-      // Agregar amigos
-      agregar();
-      break;
-    case 2:
-      // Recuperar de externo
-      recuperar();
-      break;
-    case 3:
-      // Salir
-      system("cls");
-      exit(-1);
-      break;
-    default:
-      cout << '\n' << "Elija una opcion valida." << endl;
-      getch();
-      main();
-      break;
-  }
+    fclose(fp);
+    cout << "2. Recuperar de unidad fisica." << '\n';
+    cout << "3. Salir." << '\n';
+    cout << '\n' << "Elija una opcion: ";
+    cin >> opcion;
 
+    switch (opcion)
+    {
+      case 1:
+        // Agregar amigos
+        agregar();
+        break;
+      case 2:
+        // Recuperar de externo
+        recuperar();
+        break;
+      case 3:
+        // Salir
+        system("cls");
+        exit(-1);
+        break;
+      default:
+        cout << '\n' << "Elija una opcion valida." << endl;
+
+        cout << '\n' << "Pulse cualquier tecla para continuar.";
+        getch();
+        main();
+        break;
+    }
+  }
+  else
+  {
+    cout << "2. Salir." << '\n';
+    cout << '\n' << "Elija una opcion: ";
+    cin >> opcion;
+
+    switch (opcion)
+    {
+      case 1:
+        // Agregar amigos
+        agregar();
+        break;
+      case 2:
+        // Salir
+        system("cls");
+        exit(-1);
+        break;
+      default:
+        cout << '\n' << "Elija una opcion valida." << endl;
+
+        cout << '\n' << "Pulse cualquier tecla para continuar.";
+        getch();
+        main();
+        break;
+    }
+  }
 }
 
 void menuCompleto(void)
@@ -95,47 +128,97 @@ void menuCompleto(void)
   cout << "3. Actualizar amigo." << '\n';
   cout << "4. Borrar amigo." << '\n';
   cout << "5. Guardar a unidad fisca." << '\n';
-  cout << "6. Recuperar de unidad fisica." << '\n';
-  cout << "7. Salir." << '\n';
-  cout << '\n' << "Elija una opcion: ";
-  cin >> opcion;
-
-  switch (opcion)
+  FILE *fp = fopen("./datos.csv", "r");
+  if (fp != NULL)
   {
-    case 1:
+    fclose(fp);
+    cout << "6. Recuperar de unidad fisica." << '\n';
+    cout << "7. Salir." << '\n';
+    cout << '\n' << "Elija una opcion: ";
+    cin >> opcion;
+
+    switch (opcion)
+    {
+      case 1:
       // Agregar amigos
       agregar();
       break;
-    case 2:
+      case 2:
       // Ver amigos
       mostrar();
       break;
-    case 3:
+      case 3:
       // Actualizar amigo
       actualizar();
       break;
-    case 4:
+      case 4:
       // Borrar amigo
       eliminar();
       break;
-    case 5:
+      case 5:
       // Guardar en unidad
       guardar();
       break;
-    case 6:
+      case 6:
       // Recuperar de externo
       recuperar();
       break;
-    case 7:
+      case 7:
       // Salir
       system("cls");
       exit(-1);
       break;
-    default:
+      default:
       cout << '\n' << "Elija una opcion valida." << endl;
+
+      cout << '\n' << "Pulse cualquier tecla para continuar.";
       getch();
       main();
       break;
+    }
+
+  }
+  else
+  {
+    cout << "6. Salir." << '\n';
+    cout << '\n' << "Elija una opcion: ";
+    cin >> opcion;
+
+    switch (opcion)
+    {
+      case 1:
+      // Agregar amigos
+      agregar();
+      break;
+      case 2:
+      // Ver amigos
+      mostrar();
+      break;
+      case 3:
+      // Actualizar amigo
+      actualizar();
+      break;
+      case 4:
+      // Borrar amigo
+      eliminar();
+      break;
+      case 5:
+      // Guardar en unidad
+      guardar();
+      break;
+      case 6:
+      // Salir
+      system("cls");
+      exit(-1);
+      break;
+      default:
+      cout << '\n' << "Elija una opcion valida." << endl;
+
+      cout << '\n' << "Pulse cualquier tecla para continuar.";
+      getch();
+      main();
+      break;
+    }
   }
 
 }
@@ -153,10 +236,21 @@ void agregar(void)
   cout << "Nombre: ";
   cin.getline(nom,100);
   nuevo->nombre = cadena(nom,strlen(nom));
-  cout << "Telefono: ";
-  cin >> nuevo->telefono;
-  cout << "Correo: ";
-  cin >> nuevo->correo;
+  do {
+    cout << "Telefono: ";
+    cin >> nuevo->telefono;
+  } while(nuevo->telefono.length()!=10);
+  size_t arroba, punto;
+  do {
+    cout << "Correo: ";
+    cin >> nuevo->correo;
+    arroba = nuevo->correo.find('@');
+    punto = nuevo->correo.find('.');
+    if (arroba == string::npos || punto == string::npos)
+    {
+      arroba = 0;
+    }
+  } while(arroba == 0 || punto <= (arroba+1) || (nuevo->correo.length()-1) == punto);
 
   apu_nodo desborde = agenda.inicio;
   apu_nodo ultimo;
@@ -181,6 +275,8 @@ void agregar(void)
   contactos++;
 
   free(nom);
+
+  cout << '\n' << "Pulse cualquier tecla para continuar.";
   getch();
   main();
 }
@@ -204,6 +300,8 @@ void mostrar(void)
     conta++;
   }
 
+
+  cout << '\n' << "Pulse cualquier tecla para continuar.";
   getch();
   main();
 }
@@ -256,6 +354,8 @@ void eliminar(void)
 
   cout << endl << "CONTACTO ELIMINADO CORRECTAMENTE." << endl;
 
+
+  cout << '\n' << "Pulse cualquier tecla para continuar.";
   getch();
   main();
 }
@@ -293,7 +393,9 @@ void actualizar(void)
 
   if (modificado == NULL)
   {
-    cout << endl << "NO SE PUDO MODIFICAR. REGRESANDO..." << endl;
+    cout << endl << "NO SE PUDO MODIFICAR." << endl;
+
+    cout << '\n' << "Pulse cualquier tecla para continuar.";
     getch();
     main();
   }
@@ -302,6 +404,8 @@ void actualizar(void)
 
   cout << endl << "ACTUALIZADO CORRECTAMENTE." << endl;
 
+
+  cout << '\n' << "Pulse cualquier tecla para continuar.";
   getch();
   menu_actualizar(modificado);
 }
@@ -360,6 +464,8 @@ void menu_actualizar(apu_nodo modificado)
     default:
       system("cls");
       cout << "ERROR AL MODIFICAR. REGRESANDO..." << endl;
+
+      cout << '\n' << "Pulse cualquier tecla para continuar.";
       getch();
       main();
       break;
@@ -398,6 +504,8 @@ void guardar(void)
 
   cout << endl << "LOS DATOS FUERON GUARDADOS CORRECTAMENTE." << endl;
 
+
+  cout << '\n' << "Pulse cualquier tecla para continuar.";
   getch();
   main();
 }
@@ -411,6 +519,8 @@ void recuperar(void)
   {
     system("cls");
     cout << "No se encontro el archivo 'datos.csv'." << endl;
+
+    cout << '\n' << "Pulse cualquier tecla para continuar.";
     getch();
     main();
   }
@@ -419,6 +529,8 @@ void recuperar(void)
   if (pch == NULL) {
     fclose(fp);
     cout << "ERROR EN EL BUFFER." << endl;
+
+    cout << '\n' << "Pulse cualquier tecla para continuar.";
     getch();
     main();
   }
@@ -494,6 +606,8 @@ void recuperar(void)
 
   cout << endl << "LOS DATOS FUERON GUARDADOS CORRECTAMENTE." << endl;
 
+
+  cout << '\n' << "Pulse cualquier tecla para continuar.";
   getch();
   main();
 }
