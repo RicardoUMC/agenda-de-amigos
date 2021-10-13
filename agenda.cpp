@@ -38,7 +38,10 @@ void actualizar(void);
 void menu_actualizar(apu_nodo modificado);
 void guardar(void);
 void recuperar(void);
+
 string cadena(char* a, int size);
+string telefono(void);
+string correo(void);
 
 int main(void)
 {
@@ -236,21 +239,8 @@ void agregar(void)
   cout << "Nombre: ";
   cin.getline(nom,100);
   nuevo->nombre = cadena(nom,strlen(nom));
-  do {
-    cout << "Telefono: ";
-    cin >> nuevo->telefono;
-  } while(nuevo->telefono.length()!=10);
-  size_t arroba, punto;
-  do {
-    cout << "Correo: ";
-    cin >> nuevo->correo;
-    arroba = nuevo->correo.find('@');
-    punto = nuevo->correo.find('.');
-    if (arroba == string::npos || punto == string::npos)
-    {
-      arroba = 0;
-    }
-  } while(arroba == 0 || punto <= (arroba+1) || (nuevo->correo.length()-1) == punto);
+  nuevo->telefono = telefono();
+  nuevo->correo = correo();
 
   apu_nodo desborde = agenda.inicio;
   apu_nodo ultimo;
@@ -375,6 +365,7 @@ void actualizar(void)
     while (aux != NULL)
     {
       conta++;
+      cout << "[CONTACTO " << conta << "]" << '\n';
       aux = aux->sig;
     }
 
@@ -401,13 +392,6 @@ void actualizar(void)
   }
 
   menu_actualizar(modificado);
-
-  cout << endl << "ACTUALIZADO CORRECTAMENTE." << endl;
-
-
-  cout << '\n' << "Pulse cualquier tecla para continuar.";
-  getch();
-  menu_actualizar(modificado);
 }
 
 void menu_actualizar(apu_nodo modificado)
@@ -433,7 +417,6 @@ void menu_actualizar(apu_nodo modificado)
 
   char *nom = (char*) malloc(100*sizeof(char));
 
-  size_t arroba, punto;
   switch (opcion)
   {
     case 1:
@@ -443,47 +426,22 @@ void menu_actualizar(apu_nodo modificado)
       modificado->nombre = cadena(nom,strlen(nom));
       break;
     case 2:
-      do {
-        cout << "Telefono: ";
-        cin >> modificado->telefono;
-      } while(modificado->telefono.length()!=10);
+      modificado->telefono = telefono();
       break;
     case 3:
-      do {
-        cout << "Correo: ";
-        cin >> modificado->correo;
-        arroba = modificado->correo.find('@');
-        punto = modificado->correo.find('.');
-        if (arroba == string::npos || punto == string::npos)
-        {
-          arroba = 0;
-        }
-      } while(arroba == 0 || punto <= (arroba+1) || (modificado->correo.length()-1) == punto);
-      cout << "Correo: ";
-      cin >> modificado->correo;
+      modificado->correo = correo();
       break;
     case 4:
       cin.ignore();
       cout << "Nombre: ";
       cin.getline(nom,100);
       modificado->nombre = cadena(nom,strlen(nom));
-      do {
-        cout << "Telefono: ";
-        cin >> modificado->telefono;
-      } while(modificado->telefono.length()!=10);
-      do {
-        cout << "Correo: ";
-        cin >> modificado->correo;
-        arroba = modificado->correo.find('@');
-        punto = modificado->correo.find('.');
-        if (arroba == string::npos || punto == string::npos)
-        {
-          arroba = 0;
-        }
-      } while(arroba == 0 || punto <= (arroba+1) || (modificado->correo.length()-1) == punto);
+      modificado->telefono = telefono();
+      modificado->correo = correo();
       break;
     case 5:
       main();
+      break;
     default:
       system("cls");
       cout << "ERROR AL MODIFICAR. REGRESANDO..." << endl;
@@ -494,7 +452,14 @@ void menu_actualizar(apu_nodo modificado)
       break;
   }
 
+  cout << endl << "ACTUALIZADO CORRECTAMENTE." << endl;
+
+
+  cout << '\n' << "Pulse cualquier tecla para continuar.";
+  getch();
+
   free(nom);
+  menu_actualizar(modificado);
 }
 
 void guardar(void)
@@ -570,17 +535,12 @@ void recuperar(void)
     char *buffer = (char*) malloc((strlen(str)+1)*sizeof(char));
     strcpy(buffer,str);
 
-    string str_aux;
-
     pch = strtok(buffer,",");
-    str_aux = cadena(pch,strlen(pch));
-    nuevo->nombre = str_aux;
+    nuevo->nombre = cadena(pch,strlen(pch));
     pch = strtok(NULL,",");
-    str_aux = cadena(pch,strlen(pch));
-    nuevo->telefono = str_aux;
+    nuevo->nombre = cadena(pch,strlen(pch));
     pch = strtok(NULL,",");
-    str_aux = cadena(pch,strlen(pch));
-    nuevo->correo = str_aux;
+    nuevo->nombre = cadena(pch,strlen(pch));
 
     apu_nodo desborde = agenda.inicio;
     apu_nodo ultimo;
@@ -635,6 +595,7 @@ void recuperar(void)
   main();
 }
 
+//USABLES
 string cadena(char* a, int size)
 {
   int i;
@@ -644,4 +605,35 @@ string cadena(char* a, int size)
     s = s + a[i];
   }
   return s;
+}
+
+string telefono(void)
+{
+  string cadena;
+
+  do {
+    cout << "Telefono: ";
+    cin >> cadena;
+  } while(cadena.length()!=10);
+
+  return cadena;
+}
+
+string correo(void)
+{
+  size_t arroba, punto;
+  string cadena;
+
+  do {
+    cout << "Correo: ";
+    cin >> cadena;
+    arroba = cadena.find('@');
+    punto = cadena.find('.');
+    if (arroba == string::npos || punto == string::npos)
+    {
+      arroba = 0;
+    }
+  } while(arroba == 0 || punto <= (arroba+1) || (cadena.length()-1) == punto);
+
+  return cadena;
 }
