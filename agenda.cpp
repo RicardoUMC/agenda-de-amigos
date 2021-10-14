@@ -45,7 +45,7 @@ string correo(void);
 
 int main(void)
 {
-  system("cls");
+  cout << '\n' << '\n';
   cout << "[NO. CONTACTOS: " << contactos << "]" << '\n' << endl;
 
   if (contactos<1) menuInicial();
@@ -82,7 +82,7 @@ void menuInicial(void)
         break;
       case 3:
         // Salir
-        system("cls");
+        cout << '\n' << '\n';
         exit(-1);
         break;
       default:
@@ -108,7 +108,7 @@ void menuInicial(void)
         break;
       case 2:
         // Salir
-        system("cls");
+        cout << '\n' << '\n';
         exit(-1);
         break;
       default:
@@ -168,7 +168,7 @@ void menuCompleto(void)
       break;
       case 7:
       // Salir
-      system("cls");
+      cout << '\n' << '\n';
       exit(-1);
       break;
       default:
@@ -211,7 +211,7 @@ void menuCompleto(void)
       break;
       case 6:
       // Salir
-      system("cls");
+      cout << '\n' << '\n';
       exit(-1);
       break;
       default:
@@ -229,7 +229,7 @@ void menuCompleto(void)
 // FUNCIONES
 void agregar(void)
 {
-  system("cls");
+  cout << '\n' << '\n';
 
   char *nom = (char*) malloc(100*sizeof(char));
   apu_nodo nuevo = new(nodo);
@@ -273,7 +273,7 @@ void agregar(void)
 
 void mostrar(void)
 {
-  system("cls");
+  cout << '\n' << '\n';
 
   apu_nodo aux = agenda.inicio;
 
@@ -303,7 +303,7 @@ void eliminar(void)
 
   do
   {
-    system("cls");
+    cout << '\n' << '\n';
 
     aux = agenda.inicio;
 
@@ -357,7 +357,7 @@ void actualizar(void)
 
   do
   {
-    system("cls");
+    cout << '\n' << '\n';
 
     aux = agenda.inicio;
 
@@ -398,7 +398,7 @@ void menu_actualizar(apu_nodo modificado)
 {
   do
   {
-    system("cls");
+    cout << '\n' << '\n';
 
     cout << "ACCIONES:" << '\n';
     cout << "1. Modificar nombre." << '\n';
@@ -411,7 +411,7 @@ void menu_actualizar(apu_nodo modificado)
 
   } while(opcion < 1 || opcion > 5);
 
-  system("cls");
+  cout << '\n' << '\n';
 
   cout << "NUEVOS VALORES:" << '\n';
 
@@ -443,7 +443,7 @@ void menu_actualizar(apu_nodo modificado)
       main();
       break;
     default:
-      system("cls");
+      cout << '\n' << '\n';
       cout << "ERROR AL MODIFICAR. REGRESANDO..." << endl;
 
       cout << '\n' << "Pulse cualquier tecla para continuar.";
@@ -505,7 +505,7 @@ void recuperar(void)
 
   if(fp == NULL)
   {
-    system("cls");
+    cout << '\n' << '\n';
     cout << "No se encontro el archivo 'datos.csv'." << endl;
 
     cout << '\n' << "Pulse cualquier tecla para continuar.";
@@ -538,9 +538,9 @@ void recuperar(void)
     pch = strtok(buffer,",");
     nuevo->nombre = cadena(pch,strlen(pch));
     pch = strtok(NULL,",");
-    nuevo->nombre = cadena(pch,strlen(pch));
+    nuevo->telefono = cadena(pch,strlen(pch));
     pch = strtok(NULL,",");
-    nuevo->nombre = cadena(pch,strlen(pch));
+    nuevo->correo = cadena(pch,strlen(pch));
 
     apu_nodo desborde = agenda.inicio;
     apu_nodo ultimo;
@@ -610,11 +610,26 @@ string cadena(char* a, int size)
 string telefono(void)
 {
   string cadena;
+  int ascii;
+  int bandera = 1;
 
   do {
     cout << "Telefono: ";
     cin >> cadena;
-  } while(cadena.length()!=10);
+    if (cadena.length()==10)
+    {
+      bandera = 0;
+      for (int i = 0; i < 10; i++)
+      {
+        ascii = cadena[i];
+        if (ascii < 48 || ascii > 57)
+        {
+          bandera = 1;
+          i=10;
+        }
+      }
+    }
+  } while(bandera);
 
   return cadena;
 }
